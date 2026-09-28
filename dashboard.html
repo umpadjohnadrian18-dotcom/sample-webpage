@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard</title>
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #0a0a17ec;
+color: white;
+}
+
+/* Navbar */
+.navbar {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 15px 30px;
+background: #0a0a17;
+position: sticky;
+top: 0;
+z-index: 100;
+transition: background 0.3s ease-in-out;
+}
+.navbar h1 {
+color: #0ef;
+font-size: 24px;
+transition: transform 0.3s ease;
+}
+.navbar h1:hover {
+transform: scale(1.05);
+}
+.navbar a {
+color: white;
+text-decoration: none;
+font-size: 18px;
+transition: color 0.3s ease;
+}
+.navbar a:hover {
+color: #0ef;
+}
+
+/* Dashboard Layout */
+.dashboard {
+display: grid;
+grid-template-columns: 250px 1fr;
+height: calc(100vh - 60px);
+}
+
+/* Sidebar */
+.sidebar {
+background: #111122;
+padding: 20px;
+transition: background 0.3s ease;
+}
+.sidebar:hover {
+background: #161633;
+}
+.sidebar ul {
+list-style: none;
+padding: 0;
+}
+.sidebar ul li {
+margin: 20px 0;
+}
+.sidebar ul li a {
+color: white;
+text-decoration: none;
+font-size: 18px;
+display: flex;
+align-items: center;
+gap: 8px;
+transition: color 0.3s ease, transform 0.3s ease;
+}
+.sidebar ul li a:hover {
+color: #0ef;
+transform: translateX(5px);
+}
+
+/* Main Content */
+.main {
+padding: 30px;
+overflow-y: auto;
+}
+.main h2 {
+color: #0ef;
+margin-bottom: 20px;
+animation: fadeIn 1s ease-in-out;
+}
+.card {
+background: #1a1a2e;
+padding: 20px;
+border-radius: 10px;
+margin-bottom: 20px;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card:hover {
+transform: translateY(-5px);
+box-shadow: 0 8px 15px rgba(0, 238, 255, 0.2);
+}
+.card h3 {
+color: #0ef;
+margin-bottom: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(-10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+      /* Existing styles ... keep everything above this intact */
+
+  /* Responsive Styles */
+  @media (max-width: 1024px) {
+    .dashboard {
+      grid-template-columns: 200px 1fr; /* smaller sidebar for tablets */
+    }
+    .sidebar ul li a {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .dashboard {
+      grid-template-columns: 1fr; /* stack sidebar on top of main content */
+      height: auto;
+    }
+    .sidebar {
+      width: 100%;
+      display: flex;
+      overflow-x: auto;
+      padding: 10px;
+    }
+    .sidebar ul {
+      display: flex;
+      flex-direction: row;
+      gap: 15px;
+    }
+    .sidebar ul li {
+      margin: 0;
+    }
+    .main {
+      padding: 15px;
+    }
+    .card {
+      padding: 15px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .navbar h1 {
+      font-size: 20px;
+    }
+    .navbar a {
+      font-size: 16px;
+    }
+    .sidebar ul li a {
+      font-size: 14px;
+      gap: 5px;
+    }
+    .card h3 {
+      font-size: 16px;
+    }
+    .main h2 {
+      font-size: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+<!-- Navbar -->
+<div class="navbar">
+<h1>My Dashboard</h1>
+<p>Back to <a href="/login">Login</a> page?</p>
+</div>
+
+<!-- Dashboard Layout -->
+<div class="dashboard">
+<!-- Sidebar -->
+<div class="sidebar">
+<ul>
+<li><a href="#"><i class='bx bxs-home'></i> Home</a></li>
+<li><a href="#"><i class='bx bxs-user'></i> Profile</a></li>
+<li><a href="#"><i class='bx bxs-bar-chart-alt-2'></i> Stats</a></li>
+<li><a href="#"><i class='bx bxs-bell'></i> Notifications</a></li>
+<li><a href="#"><i class='bx bxs-cog'></i> Settings</a></li>
+<li><a href="#"><i class='bx bxs-log-out'></i> Logout</a></li>
+</ul>
+</div>
+
+<!-- Main Content -->
+<div class="main">
+<h2>Welcome, Adrian!</h2>
+
+<div class="card">
+<h3><i class='bx bxs-user-circle'></i> Profile Info</h3>
+<p><strong>Name:</strong> Adrian Umpad</p>
+<p><strong>Email:</strong> adrian@example.com</p>
+<p><strong>Status:</strong> Active</p>
+</div>
+
+<div class="card">
+<h3><i class='bx bxs-bar-chart-alt-2'></i> Quick Stats</h3>
+<canvas id="myChart" width="400" height="200"></canvas>
+</div>
+
+<div class="card">
+<h3><i class='bx bxs-bell'></i> Announcements</h3>
+<ul>
+<li>📢 New system update coming next week.</li>
+<li>📢 Maintenance scheduled for Sept 10.</li>
+<li>📢 Don’t forget to back up your files!</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- Chart.js -->
+<script>
+const ctx = document.getElementById('myChart').getContext('2d');
+new Chart(ctx, {
+type: 'bar',
+data: {
+labels: ['Completed', 'Pending', 'In Progress'],
+datasets: [{
+label: 'Tasks',
+data: [12, 3, 5],
+backgroundColor: ['#0ef', '#ff4d6d', '#ffa600'],
+borderRadius: 5
+}]
+},
+options: {
+responsive: true,
+plugins: {
+legend: { labels: { color: 'white' } }
+},
+scales: {
+x: { ticks: { color: 'white' }, grid: { color: '#333' } },
+y: { ticks: { color: 'white' }, grid: { color: '#333' } }
+}
+}
+});
+</script>
+</body>
+</html>
